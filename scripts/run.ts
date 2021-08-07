@@ -1,11 +1,11 @@
 import { BigNumber, Contract } from "ethers"
-import { ethers, artifacts } from "hardhat"
+import { ethers, network } from "hardhat"
 import abi from "../abi.json"
+import dexs from "../dexs.json"
 
 
-const factoryAddress = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
-const routerAddress = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
-
+// const DEX = dexByNetwork(network.name)
+const DEX = dexs.pancakeswapTestnet
 const USDX_SUPPLY = BigNumber.from(1000).mul(BigNumber.from(10).pow(18))
 
 
@@ -21,7 +21,7 @@ async function deployToken(): Promise<Contract> {
 async function main() {
   const sender = await ethers.provider.getSigner().getAddress()
 
-  const router = await ethers.getContractAt(abi.uniRouter, routerAddress)
+  const router = await ethers.getContractAt(abi.uniRouter, DEX.router)
   const WETH = await router.WETH()
   
   // deploy USDX token (initial supply is minted to sender)
@@ -49,16 +49,15 @@ async function main() {
   const deadline = (await ethers.provider.getBlock(blockNumber)).timestamp + (60 * 60)
   let params = { value: amountETHDesired }
   
+  // TODO: throw on failed txs
   // approve token transfer first
   await token.approve(router.address, amountTokenDesired)
-  // TODO: throw on failed tx
-
   // add liquidity
   const tx = await router.addLiquidityETH(
     token.address, amountTokenDesired, amountTokenMin, amountETHMin, sender, deadline, params
   )
   
-  // TODO: log and check price
+
   console.log(`ETH balance: ${ethers.utils.formatEther(await ethers.provider.getBalance(sender))}`)
   console.log(`${symbol} balance: ${ethers.utils.formatUnits(await token.balanceOf(sender), decimals)}`)
   // console.log(`tx = ${JSON.stringify(await tx.wait())}`)
@@ -71,3 +70,21 @@ main()
     console.error(error)
     process.exit(1)
   })
+
+
+
+
+
+// // select DEX based on network
+// function dexByNetwork(network: string) {
+//   switch(network) {
+//     case 'ethereum':
+//     case 'ropsten':
+//       return dexs.uniswap
+//     case 'bsc':
+//       return dexs.pancakeswap
+//     default:
+//       throw new Error(`No DEX for ${network} network`)
+//   }
+// }
+ 

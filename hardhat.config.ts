@@ -6,7 +6,7 @@ dotenv.config()
 
 const config: HardhatUserConfig = {
   networks: {
-    main: {
+    ethereum: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
       accounts: [ process.env.PRIVATE_KEY! ],
       gas: 400000,
@@ -18,6 +18,10 @@ const config: HardhatUserConfig = {
     },
     polygon: {
       url: 'https://rpc-mumbai.maticvigil.com',
+      accounts: [ process.env.PRIVATE_KEY! ]
+    },
+    bsc: {
+      url: 'https://data-seed-prebsc-1-s1.binance.org:8545',
       accounts: [ process.env.PRIVATE_KEY! ]
     }
   },
