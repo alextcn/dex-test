@@ -19,28 +19,50 @@ async function deployToken(): Promise<Contract> {
 
 
 async function main() {
-  const senderAddress = await ethers.provider.getSigner().getAddress()
+  const sender = await ethers.provider.getSigner().getAddress()
 
   const router = await ethers.getContractAt(abi.uniRouter, routerAddress)
   const WETH = await router.WETH()
-  console.log(`WETH: ${WETH}`)
-
-  const token = await deployToken()
-  console.log(`${await token.symbol()} deployed at ${token.address}`)
-
-  const balance = await token.balanceOf(senderAddress)
-  console.log(`balanceOf(${senderAddress}): ${ethers.utils.formatUnits(balance, await token.decimals())}`)
   
-  // const factory = await ethers.getContractAt(abi.uniFactory, factoryAddress)
-  // const pair = await factory.getPair(WETH, token.address)
-  // if (pair == '0x0000000000000000000000000000000000000000') {
-  //   throw new Error(`No pair for ${token.address}`)
-  // }
+  // deploy USDX token (initial supply is minted to sender)
+  const token = await deployToken()
+  const symbol = await token.symbol()
+  const decimals = await token.decimals()
+  
+  console.log(`sender: ${sender}`)
+  console.log(`WETH: ${WETH}`)
+  console.log(`${await token.symbol()}: ${token.address}`)
+  console.log('------')
 
+  console.log(`ETH balance: ${ethers.utils.formatEther(await ethers.provider.getBalance(sender))}`)
+  console.log(`${symbol} balance: ${ethers.utils.formatUnits(await token.balanceOf(sender), decimals)}`)
+  console.log('------')
+  
+  // create pair and add liquidity 
+  // (if a pool for the passed token and WETH does not exists, one is created automatically, 
+  // and exactly amountTokenDesired/msg.value tokens are added)
+  const amountTokenDesired = ethers.utils.parseUnits('50', decimals)
+  const amountETHDesired = ethers.utils.parseEther('1')
+  const amountTokenMin = amountTokenDesired
+  const amountETHMin = amountETHDesired
+  const blockNumber = await ethers.provider.getBlockNumber()
+  const deadline = (await ethers.provider.getBlock(blockNumber)).timestamp + (60 * 60)
+  let params = { value: amountETHDesired }
+  
+  // approve token transfer first
+  await token.approve(router.address, amountTokenDesired)
+  // TODO: throw on failed tx
 
-  // addLiquidityETH
-  // If a pool for the passed token and WETH does not exists, one is created automatically, 
-  // and exactly amountTokenDesired/msg.value tokens are added.
+  // add liquidity
+  const tx = await router.addLiquidityETH(
+    token.address, amountTokenDesired, amountTokenMin, amountETHMin, sender, deadline, params
+  )
+  
+  // TODO: log and check price
+  console.log(`ETH balance: ${ethers.utils.formatEther(await ethers.provider.getBalance(sender))}`)
+  console.log(`${symbol} balance: ${ethers.utils.formatUnits(await token.balanceOf(sender), decimals)}`)
+  // console.log(`tx = ${JSON.stringify(await tx.wait())}`)
+
 }
 
 main()
