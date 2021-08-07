@@ -6,6 +6,12 @@ dotenv.config()
 
 const config: HardhatUserConfig = {
   networks: {
+    main: {
+      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+      accounts: [ process.env.PRIVATE_KEY! ],
+      gas: 400000,
+      gasPrice: 40
+    },
     ropsten: {
       url: `https://eth-ropsten.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
       accounts: [ process.env.PRIVATE_KEY! ]
