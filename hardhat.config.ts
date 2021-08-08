@@ -17,10 +17,18 @@ const config: HardhatUserConfig = {
       accounts: [ process.env.PRIVATE_KEY! ]
     },
     polygon: {
+      url: 'https://matic-mainnet.chainstacklabs.com',
+      accounts: [ process.env.PRIVATE_KEY! ]
+    },
+    polygonTestnet: {
       url: 'https://rpc-mumbai.maticvigil.com',
       accounts: [ process.env.PRIVATE_KEY! ]
     },
     bsc: {
+      url: 'https://bsc-dataseed.binance.org/', //  causes missing trie node error
+      accounts: [ process.env.PRIVATE_KEY! ]
+    },
+    bscTestnet: {
       url: 'https://data-seed-prebsc-1-s1.binance.org:8545',
       accounts: [ process.env.PRIVATE_KEY! ]
     }
