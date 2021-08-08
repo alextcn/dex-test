@@ -1,5 +1,11 @@
 # Test DEX
 
+Script that tests DEX on EVM-supported networks:
+1. Deploys new USDX token, mints tokens to sender
+2. Creates new USDX/WETH pair on UniswapV2-like DEX
+3. Adds liquidity to USDX/WETH pair
+4. Swaps ETH for USDX on USDX/WETH pair
+
 ### Install
 
 #### 1. Add to `.env` account private key and Alchemy API key
