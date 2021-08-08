@@ -6,53 +6,43 @@ import { testDEX } from './scripts/testdex';
 dotenv.config()
 
 
-const networkURLs = {
-  'ethereum': `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
-  'ropsten': `https://eth-ropsten.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
-  'polygon': 'https://matic-mainnet.chainstacklabs.com',
-  'polygonTestnet': 'https://rpc-mumbai.maticvigil.com',
-  'bsc': 'https://bsc-dataseed.binance.org/', //  causes missing trie node error
-  'bscTestnet': 'https://data-seed-prebsc-1-s1.binance.org:8545',
-  'heco': "https://http-mainnet-node.huobichain.com"
-}
-
-
 task('testdex', 'Launches a local forked node')
   .addParam('chain', 'Name of supported EMV-based network')
   .setAction(async (args, hre) => {
     await testDEX(hre, args.chain)
   })
 
+
 const config: HardhatUserConfig = {
   networks: {
     ethereum: {
-      url: networkURLs.ethereum,
+      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
       accounts: [ process.env.PRIVATE_KEY! ],
       gas: 400000,
       gasPrice: 40
     },
     ropsten: {
-      url: networkURLs.ropsten,
+      url: `https://eth-ropsten.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
       accounts: [ process.env.PRIVATE_KEY! ]
     },
     polygon: {
-      url: networkURLs.polygon,
+      url: 'https://matic-mainnet.chainstacklabs.com',
       accounts: [ process.env.PRIVATE_KEY! ]
     },
     polygonTestnet: {
-      url: networkURLs.polygonTestnet,
+      url: 'https://rpc-mumbai.maticvigil.com',
       accounts: [ process.env.PRIVATE_KEY! ]
     },
     bsc: {
-      url: networkURLs.bsc,
+      url: 'https://bsc-dataseed.binance.org/', //  causes missing trie node error
       accounts: [ process.env.PRIVATE_KEY! ]
     },
     bscTestnet: {
-      url: networkURLs.bscTestnet,
+      url: 'https://data-seed-prebsc-1-s1.binance.org:8545',
       accounts: [ process.env.PRIVATE_KEY! ]
     },
     heco: {
-      url: networkURLs.heco,
+      url: 'https://http-mainnet-node.huobichain.com',
       accounts: [ process.env.PRIVATE_KEY! ]
     }
   },
