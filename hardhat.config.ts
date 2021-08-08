@@ -31,6 +31,10 @@ const config: HardhatUserConfig = {
     bscTestnet: {
       url: 'https://data-seed-prebsc-1-s1.binance.org:8545',
       accounts: [ process.env.PRIVATE_KEY! ]
+    },
+    heco: {
+      url: 'https://http-mainnet-node.huobichain.com',
+      accounts: [ process.env.PRIVATE_KEY! ]
     }
   },
   solidity: {

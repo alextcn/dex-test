@@ -6,7 +6,7 @@ import dexs from "../dexs.json"
 
 
 // const DEX = dexByNetwork(network.name)
-const DEX = dexs.quickswap
+const DEX = dexs.mdex
 const USDX_SUPPLY = BigNumber.from(1000).mul(BigNumber.from(10).pow(18))
 
 
@@ -31,7 +31,7 @@ async function main() {
 
   const router = await ethers.getContractAt(abi.uniRouter, DEX.router)
   const factory = await ethers.getContractAt(abi.uniFactory, DEX.factory)
-  const WETH = await router.WETH() as string
+  const WETH = await router.WHT() as string
 
   console.log(`sender: ${sender}`)
   console.log(`WETH: ${WETH}`)
@@ -93,8 +93,9 @@ main()
 //       return dexs.pancakeswapTestnet
 //     case 'polygon':
 //       return dexs.quickswap
+//     case 'heco':
+//       return dexs.mdex
 //     default:
 //       throw new Error(`No DEX for ${network} network`)
 //   }
 // }
- 
