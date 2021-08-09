@@ -6,7 +6,7 @@ Script that tests DEX on EVM-supported networks:
 3. Adds liquidity to USDX/WETH pair
 4. Swaps ETH for USDX on USDX/WETH pair
 
-### Install
+## Install
 
 #### 1. Add to `.env` account private key and Alchemy API key
 `PRIVATE_KEY=[PRIVATE_KEY]`  
@@ -16,12 +16,12 @@ Script that tests DEX on EVM-supported networks:
 `npm install`  
 `npx hardhat compile`
 
-### Usage
+## Usage
 
 1. Fork a node on localhost: `npx hardhat node --fork [CHAIN_RPC_URL]`
 2. Run script (in a new window): `npx hardhat testdex --network localhost --chain [CHAIN_NAME]`
 
-### Chains
+## Chains
 
 | Chain name     | DEX                | RPC URL                                                |
 | -------------- | ------------------ | ------------------------------------------------------ | 
