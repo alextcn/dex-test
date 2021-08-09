@@ -76,7 +76,7 @@ export async function testDEX(hre: HardhatRuntimeEnvironment, network: string) {
   const deadline = (await ethers.provider.getBlock(blockNumber)).timestamp + (60 * 60)
   let params = { value: amountETHDesired }
   await token.approve(router.address, amountTokenDesired) // approve token transfer first
-  await router.addLiquidityETH(token.address, amountTokenDesired, amountTokenMin, amountETHMin, sender, deadline, params)
+  await (await router.addLiquidityETH(token.address, amountTokenDesired, amountTokenMin, amountETHMin, sender, deadline, params)).wait()
   console.log('Pair with liquidity created')
 
   // get LP token balance
@@ -88,7 +88,7 @@ export async function testDEX(hre: HardhatRuntimeEnvironment, network: string) {
   // swap
   const amountInETH = ethers.utils.parseEther('1')
   console.log(`Swapping ${ethers.utils.formatEther(amountInETH)} ETH ...`)
-  await router.swapExactETHForTokens('0', [WETH, token.address], sender, deadline, { value: amountInETH })
+  await (await router.swapExactETHForTokens('0', [WETH, token.address], sender, deadline, { value: amountInETH })).wait()
   console.log('Swap succeeded')
   await logBalance(ethers.provider, sender, [token, pair])
 }
