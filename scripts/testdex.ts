@@ -69,12 +69,12 @@ export async function testDEX(hre: HardhatRuntimeEnvironment, network: string) {
   // and exactly amountTokenDesired/msg.value tokens are added
   console.log('Creating pair with liquidity...')
   const amountTokenDesired = ethers.utils.parseUnits('500', 18)
-  const amountETHDesired = ethers.utils.parseEther('10')
+  const amountETHDesired = ethers.utils.parseEther('0.1')
   const amountTokenMin = amountTokenDesired
   const amountETHMin = amountETHDesired
   const blockNumber = await ethers.provider.getBlockNumber()
   const deadline = (await ethers.provider.getBlock(blockNumber)).timestamp + (60 * 60)
-  let params = { value: amountETHDesired }
+  let params = { value: amountETHDesired, gasLimit: 7000000 }
   await token.approve(router.address, amountTokenDesired) // approve token transfer first
   await (await router.addLiquidityETH(token.address, amountTokenDesired, amountTokenMin, amountETHMin, sender, deadline, params)).wait()
   console.log('Pair with liquidity created')
@@ -86,7 +86,7 @@ export async function testDEX(hre: HardhatRuntimeEnvironment, network: string) {
   
 
   // swap
-  const amountInETH = ethers.utils.parseEther('1')
+  const amountInETH = ethers.utils.parseEther('0.01')
   console.log(`Swapping ${ethers.utils.formatEther(amountInETH)} ETH ...`)
   await (await router.swapExactETHForTokens('0', [WETH, token.address], sender, deadline, { value: amountInETH })).wait()
   console.log('Swap succeeded')
