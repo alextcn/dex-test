@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "./scripts/run.js",
-  "scripts": {
-  },
+  "scripts": {},
   "author": "Alex Tkachenko",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^10.0.0"
   },
   "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@openzeppelin/contracts": "^4.2.0",
     "chai": "^4.3.4",
