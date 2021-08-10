@@ -19,6 +19,8 @@ function dexByNetwork(network: string) {
       return dexs.pancakeswapTestnet
     case 'polygon':
       return dexs.quickswap
+    case 'polygonTestnet':
+      return dexs.sushiswapPolygon
     case 'heco':
       return dexs.mdex
     default:
@@ -48,7 +50,7 @@ export async function testDEX(hre: HardhatRuntimeEnvironment, network: string) {
   const factory = await ethers.getContractAt(abi.uniFactory, DEX.factory)
   
   let WETH: string
-  if (network === 'heco') {
+  if (network === 'heco' || network === 'hecoTestnet') {
     // not actually a WETH
     WETH = await router.WHT() as string
   } else {
@@ -77,10 +79,11 @@ export async function testDEX(hre: HardhatRuntimeEnvironment, network: string) {
   let params = { value: amountETHDesired, gasLimit: 7000000 }
   await token.approve(router.address, amountTokenDesired) // approve token transfer first
   await (await router.addLiquidityETH(token.address, amountTokenDesired, amountTokenMin, amountETHMin, sender, deadline, params)).wait()
-  console.log('Pair with liquidity created')
+
+  const pairAddress = await factory.getPair(WETH, token.address)
+  console.log(`Pair with liquidity created at ${pairAddress}`)
 
   // get LP token balance
-  const pairAddress = await factory.getPair(WETH, token.address)
   const pair = await ethers.getContractAt('ERC20', pairAddress) // get as LP token only
   await logBalance(ethers.provider, sender, [token, pair])
   

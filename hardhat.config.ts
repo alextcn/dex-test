@@ -44,6 +44,10 @@ const config: HardhatUserConfig = {
     heco: {
       url: 'https://http-mainnet-node.huobichain.com',
       accounts: [ process.env.PRIVATE_KEY! ]
+    },
+    hecoTestnet: {
+      url: 'https://http-testnet.hecochain.com',
+      accounts: [ process.env.PRIVATE_KEY! ]
     }
   },
   solidity: {
